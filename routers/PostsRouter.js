@@ -80,11 +80,28 @@ postRouter.delete('/:id', async (req, res) => {
         const deletedPost = await db.remove(req.params.id)
         res.status(200).json(deletedPost)
     } catch (error) {
-        res.status(500).json({errorMessage: "There was an error while removing this post from the database"})        
+        res.status(500).json({errorMessage: "There was an error while removing this post from the database."})        
     }
 })
 
+postRouter.put('/:id', async (req, res) => {
+    if(!db.findById(req.params.id)) {
+        res.status(404).json({message: "The post associated with that id does not exist."})
+    }
+    
+    const {title, contents} = req.body
 
+    if(!title || !contents) {
+        res.status(400).json({errorMessage: "Please provide title and contents for the post."})
+    }
+
+    try {
+        const editedPost = await db.update(req.params.id, req.body)
+        res.status(200).json(editedPost);
+    } catch (error) {
+        res.status(500)
+    }
+})
 
 
 module.exports = postRouter;
