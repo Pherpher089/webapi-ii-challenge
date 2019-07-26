@@ -2,7 +2,7 @@ const express = require('express')
 const postsRouter = require('./routers/PostsRouter.js')
 
 const server = express();
-
+server.use(express.json());
 server.use('/api/posts', postsRouter);
 
 server.get('/',(req, res) => {
